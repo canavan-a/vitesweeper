@@ -19,7 +19,7 @@ const Cell = (props) => {
         <>  
             {open?(
             <div  style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
-                {bombList.includes(id) ? '💣':''}
+                {bombList.includes(id) ? '💣':secret}
             </div>
             ):(
                 <div onClick={openCell} style={{ width: 25, height: 25, backgroundColor: 'gray', borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
