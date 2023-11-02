@@ -6,17 +6,20 @@ import Cell from './components/cell'
 function App() {
   const [xSize, setXSize] = useState(15);
   const [ySize, setYSize] = useState(10);
-  const [totalBombs, setTotalBombs] = useState(20);
+  const [totalBombs, setTotalBombs] = useState(1);
   const [bombList, setBombList] = useState([]);
-  const [boardContent, setBoardContent] = useState([]);
   const [board, setBoard] = useState([]);
+  const [openedList, setOpenedList] = useState([]);
+
+  const convertValues = (x,y) =>{
+    return x+((y)*xSize)
+  }
+
 
   useEffect(() => {
     async function initBoard() {
-      // const tempBoard = Array.from({ length: ySize }, () =>
-      //   Array.from({ length: xSize }, () => null)
-      // );
-      // setBoard(tempBoard);
+      const temp = Array.from({ length: ySize }, () => false);
+      setOpenedList(temp);
       await generateBombList();
     }
     initBoard();
@@ -32,6 +35,7 @@ function App() {
   }
 
   useEffect(() => {
+    
     async function generateBoardContent() {
       console.log(bombList)
       const tempBoard = Array.from({ length: ySize }, () =>
@@ -90,8 +94,18 @@ function App() {
         {board.map((row, rowIndex) => (
           <div key={rowIndex} className="row" style={{ display: 'flex', justifyContent: 'center' }}>
             {row.map((cell, columnIndex) => (
-              <Cell key={(rowIndex * xSize) + columnIndex} x={columnIndex} y={rowIndex} id={(rowIndex * xSize) + columnIndex} secret={cell}
-                bombList={bombList}></Cell>
+              <Cell 
+              key={(rowIndex * xSize) + columnIndex} 
+              x={columnIndex} 
+              y={rowIndex} 
+              id={(rowIndex * xSize) + columnIndex} 
+              openedList={openedList}
+              setOpenedList={setOpenedList}
+              secret={cell}
+              bombList={bombList}
+              board={board}
+              convertValues={convertValues}
+              ></Cell>
             ))}
           </div>
         ))}
