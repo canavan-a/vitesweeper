@@ -9,36 +9,87 @@ const Cell = (props) => {
     const { openedList, setOpenedList } = props;
     const {board} = props; 
     const {convertValues} = props;
+    const {pullCoord} = props;
 
-    // const [open, setOpen] = useState(false);
 
-    const openCell = () =>{
-        // console.log(`${x} and ${y}`);
-        // console.log(secret);
+    const openCell = async () =>{
         const temp = [...openedList]
         temp[id] = true;
         setOpenedList(temp);
         if(secret === 0){
-            // console.log(convertValues(x,y))
-            getTouchingZeros(x,y,[[x,y]],[convertValues(x,y)]);
+
+            let start = await getTouchingZeros(x,y,[[x,y]])
+
+            while(true){
+                let copy = [...start]
+                
+                for (const value in start){
+                    copy = await getTouchingZeros(start[value][0], start[value][1], copy)
+                }
+                if (start.length !== copy.length){
+                    start = [...copy]
+                }
+                else{
+                    console.log(copy.length);
+                    // copy.forEach((element)=>{openedList[convertValues(element[0],element[1])]=true})
+                    let temp = [...openedList]
+                    copy.forEach((element)=>{
+                        
+                        temp[convertValues(element[0],element[1])] = true
+                        
+                    });
+                    setOpenedList(temp);
+                    break;
+                }
+            }
+            
         }
         
     }
 
-    function getTouchingZeros(x,y,previous,values){
-        let next = [...previous]
-        let nextValues = [...values]
+    async function getTouchingZeros(x,y,previousCoords){
+        let output = [...previousCoords]
+
         try{
-            let v = convertValues(x+1,y)
-            if( board[x+1,y] === 0 && !nextValues.includes(v)){
-                next = [...next,[x+1,y]]
-                nextValues = [...nextValues,v]
-                console.log('hello')
+            if( board[y][x+1] === 0 && !containsPair(output, [x+1,y])){
+                output.push([x+1,y]);
+                
             }
-        }catch{console.log('error')}
+        }catch{}
+
+        try{
+            if( board[y][x-1] === 0 && !containsPair(output, [x-1,y])){
+                output.push([x-1,y]);
+            }
+        }catch{}
+
+        try{
+            if( board[y+1][x] === 0 && !containsPair(output, [x,y+1])){
+                output.push([x,y+1]);
+            }
+        }catch{}
+
+        try{
+            if( board[y-1][x] === 0 && !containsPair(output, [x,y-1])){
+                output.push([x,y-1]);
+            }
+        }catch{}
+        return output
         
 
 
+    }
+
+
+    function containsPair(listOfPairs, toCheck){
+        let found = false;
+        for (const sublist of listOfPairs) {
+            if (JSON.stringify(toCheck) === JSON.stringify(sublist)) {
+                found = true;
+            }
+        }
+        return found;
+        
     }
 
     

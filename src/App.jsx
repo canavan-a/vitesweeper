@@ -6,13 +6,18 @@ import Cell from './components/cell'
 function App() {
   const [xSize, setXSize] = useState(15);
   const [ySize, setYSize] = useState(10);
-  const [totalBombs, setTotalBombs] = useState(1);
+  const [totalBombs, setTotalBombs] = useState(10);
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
   const [openedList, setOpenedList] = useState([]);
 
   const convertValues = (x,y) =>{
     return x+((y)*xSize)
+  }
+  const pullCoord = (item)=>{
+    let y = Math.floor(item/xSize)
+    let x = Math.floor(item-(y*xSize))
+    return [x,y]
   }
 
 
@@ -37,7 +42,6 @@ function App() {
   useEffect(() => {
     
     async function generateBoardContent() {
-      console.log(bombList)
       const tempBoard = Array.from({ length: ySize }, () =>
         Array.from({ length: xSize }, () => 0)
       );
@@ -77,7 +81,6 @@ function App() {
           }
         }
       }
-      console.log(tempBoard);
       setBoard(tempBoard);
     }
     if (bombList.length !== 0) {
@@ -105,6 +108,7 @@ function App() {
               bombList={bombList}
               board={board}
               convertValues={convertValues}
+              pullCoord={pullCoord}
               ></Cell>
             ))}
           </div>
