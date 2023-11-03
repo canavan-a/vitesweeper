@@ -84,6 +84,29 @@ const Cell = (props) => {
                 output.push([x,y-1]);
             }
         }catch{}
+
+        try{
+            if( board[y+1][x+1] === 0 && !containsPair(output, [x+1,y+1])){
+                output.push([x+1,y+1]);
+            }
+        }catch{}
+
+        try{
+            if( board[y-1][x-1] === 0 && !containsPair(output, [x-1,y-1])){
+                output.push([x-1,y-1]);
+            }
+        }catch{}
+
+        try{
+            if( board[y-1][x+1] === 0 && !containsPair(output, [x+1,y-1])){
+                output.push([x+1,y-1]);
+            }
+        }catch{}
+        try{
+            if( board[y+1][x-1] === 0 && !containsPair(output, [x-1,y+1])){
+                output.push([x-1,y+1]);
+            }
+        }catch{}
         return output
         
 
