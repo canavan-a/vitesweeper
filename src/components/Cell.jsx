@@ -63,7 +63,6 @@ const Cell = (props) => {
         try{
             if( board[y][x+1] === 0 && !containsPair(output, [x+1,y])){
                 output.push([x+1,y]);
-                
             }
         }catch{}
 
@@ -161,7 +160,7 @@ const Cell = (props) => {
                 output.push([x-1,y+1]);
             }
         }catch{}
-        
+
         return output
     }
 
