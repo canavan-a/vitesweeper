@@ -10,6 +10,9 @@ function App() {
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
   const [openedList, setOpenedList] = useState([]);
+  const [flagList, setFlagList] = useState([]);
+  const [restartSignal, setRestartSignal] = useState(0);
+  const [turnNumber, setTurnNumber] = useState(0); 
 
   const convertValues = (x,y) =>{
     return x+((y)*xSize)
@@ -25,10 +28,12 @@ function App() {
     async function initBoard() {
       const temp = Array.from({ length: ySize }, () => false);
       setOpenedList(temp);
+      setFlagList([]);
       await generateBombList();
     }
     initBoard();
-  }, [xSize, ySize]);
+    setTurnNumber(0);
+  }, [xSize, ySize, restartSignal]);
 
   async function generateBombList() {
     const allValues = Array.from({ length: xSize * ySize - 1 }, (_, i) => i);
@@ -109,6 +114,12 @@ function App() {
               board={board}
               convertValues={convertValues}
               pullCoord={pullCoord}
+              restartSignal={restartSignal}
+              setRestartSignal={setRestartSignal}
+              turnNumber={turnNumber}
+              setTurnNumber={setTurnNumber}
+              flagList={flagList}
+              setFlagList={setFlagList}
               ></Cell>
             ))}
           </div>

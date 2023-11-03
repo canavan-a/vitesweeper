@@ -10,9 +10,19 @@ const Cell = (props) => {
     const {board} = props; 
     const {convertValues} = props;
     const {pullCoord} = props;
-
+    const {restartSignal ,setRestartSignal} = props;
+    const {turnNumber, setTurnNumber} = props;
+    const {flagList, setFlagList} = props;
 
     const openCell = async () =>{
+        if(flagList.includes(id)){return}
+        if(secret !== 0 && turnNumber === 0){
+            console.log('not zero retrying')
+            setRestartSignal(restartSignal+1);
+            return
+        }
+        
+        setTurnNumber(turnNumber+1);
         const temp = [...openedList]
         temp[id] = true;
         setOpenedList(temp);
@@ -92,6 +102,21 @@ const Cell = (props) => {
         
     }
 
+
+    const handleRightClick = (e) => {
+        e.preventDefault();
+        if(flagList.includes(id)){
+            const temp = [...flagList]
+            const x = temp.filter(item => item !== id)
+            setFlagList(x);
+        }
+        else{
+            const temp = [...flagList]
+            temp.push(id)
+            setFlagList(temp);
+        }
+        
+    }
     
 
 
@@ -102,8 +127,8 @@ const Cell = (props) => {
                 {bombList.includes(id) ? '💣':secret}
             </div>
             ):(
-                <div onClick={openCell} style={{ width: 25, height: 25, backgroundColor: 'gray', borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
-                {/* {id} */}
+            <div onClick={openCell} onContextMenu={handleRightClick} style={{ width: 25, height: 25, backgroundColor: 'gray', borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
+                {flagList.includes(id)?'F':''}
             </div>
             )}
         </>
