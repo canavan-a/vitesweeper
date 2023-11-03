@@ -41,7 +41,7 @@ const Cell = (props) => {
                 }
                 else{
                     console.log(copy.length);
-                    // copy.forEach((element)=>{openedList[convertValues(element[0],element[1])]=true})
+                    
                     let temp = [...openedList]
                     copy.forEach((element)=>{
                         
@@ -108,9 +108,61 @@ const Cell = (props) => {
             }
         }catch{}
         return output
+    }
+
+    async function addExtraLayer(x,y,previousCoords){
+        let output = [...previousCoords]
+
+        try{
+            if( !containsPair(output, [x+1,y])){
+                output.push([x+1,y]);
+                
+            }
+        }catch{}
+
+        try{
+            if( !containsPair(output, [x-1,y])){
+                output.push([x-1,y]);
+            }
+        }catch{}
+
+        try{
+            if( !containsPair(output, [x,y+1])){
+                output.push([x,y+1]);
+            }
+        }catch{}
+
+        try{
+            if( !containsPair(output, [x,y-1])){
+                output.push([x,y-1]);
+            }
+        }catch{}
+
+        try{
+            if( !containsPair(output, [x+1,y+1])){
+                output.push([x+1,y+1]);
+            }
+        }catch{}
+
+        try{
+            if( !containsPair(output, [x-1,y-1])){
+                output.push([x-1,y-1]);
+            }
+        }catch{}
+
+        try{
+            if( !containsPair(output, [x+1,y-1])){
+                output.push([x+1,y-1]);
+            }
+        }catch{}
+
+        try{
+            if( !containsPair(output, [x-1,y+1])){
+                output.push([x-1,y+1]);
+            }
+        }catch{}
         
-
-
+        return output
     }
 
 
