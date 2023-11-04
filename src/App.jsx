@@ -4,8 +4,8 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Cell from './components/cell'
 function App() {
-  const [xSize, setXSize] = useState(15);
-  const [ySize, setYSize] = useState(10);
+  const [xSize, setXSize] = useState(12);
+  const [ySize, setYSize] = useState(17);
   const [totalBombs, setTotalBombs] = useState(10);
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
@@ -120,6 +120,8 @@ function App() {
               setTurnNumber={setTurnNumber}
               flagList={flagList}
               setFlagList={setFlagList}
+              xSize={xSize}
+              ySize={ySize}
               ></Cell>
             ))}
           </div>

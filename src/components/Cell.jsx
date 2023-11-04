@@ -3,6 +3,8 @@ import { useState } from 'react'
 const Cell = (props) => {
     const { x } = props;
     const { y } = props;
+    const {xSize}=props;
+    const {ySize}=props;
     const { id } =  props;
     const { bombList } = props;
     const { secret } = props;
@@ -42,7 +44,6 @@ const Cell = (props) => {
                 }
                 else{
                     setHoldState(copy);
-                    console.log(copy.length);
                     
                     let temp = [...openedList]
                     copy.forEach((element)=>{
@@ -61,9 +62,7 @@ const Cell = (props) => {
             }
             let temp = [...openedList]
             copy.forEach((element)=>{
-                if(!element.includes(-1) && !element.includes(15)){
-                    console.log(element)
-                    console.log(board[0][15])
+                if(!element.includes(-1) && !(element[0] ===  xSize) && !(element[1] ===  ySize)){
                     temp[convertValues(element[0],element[1])] = true
                 }
                 
@@ -75,6 +74,9 @@ const Cell = (props) => {
         }
         
     }
+
+    
+
 
     async function getTouchingZeros(x,y,previousCoords){
         let output = [...previousCoords]
