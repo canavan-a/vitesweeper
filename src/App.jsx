@@ -4,23 +4,55 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Cell from './components/cell'
 function App() {
-  const [xSize, setXSize] = useState(15);
-  const [ySize, setYSize] = useState(10);
-  const [totalBombs, setTotalBombs] = useState(20);
+  const [xSize, setXSize] = useState(12);
+  const [ySize, setYSize] = useState(17);
+  const [totalBombs, setTotalBombs] = useState(3);
   const [bombList, setBombList] = useState([]);
-  const [boardContent, setBoardContent] = useState([]);
   const [board, setBoard] = useState([]);
+  const [openedList, setOpenedList] = useState([]);
+  const [flagList, setFlagList] = useState([]);
+  const [restartSignal, setRestartSignal] = useState(0);
+  const [turnNumber, setTurnNumber] = useState(0); 
+
+  const convertValues = (x,y) =>{
+    return x+((y)*xSize)
+  }
+  const pullCoord = (item)=>{
+    let y = Math.floor(item/xSize)
+    let x = Math.floor(item-(y*xSize))
+    return [x,y]
+  }
+
+    async function winCondition(){
+    const temp = [...openedList]
+    if (temp.length > 0){
+      let win = 'win'
+      let count = 0;
+      for(const element in temp){
+        if(temp[element]===false || temp[element] ===undefined){
+          // console.log(element);
+          count = count +1;
+        }
+      }
+      console.log('count');
+      console.log(count)
+
+
+    }
+    }
+    
+
 
   useEffect(() => {
     async function initBoard() {
-      // const tempBoard = Array.from({ length: ySize }, () =>
-      //   Array.from({ length: xSize }, () => null)
-      // );
-      // setBoard(tempBoard);
+      const temp = Array.from({ length: ySize }, () => false);
+      setOpenedList(temp);
+      setFlagList([]);
       await generateBombList();
     }
     initBoard();
-  }, [xSize, ySize]);
+    setTurnNumber(0);
+  }, [xSize, ySize, restartSignal]);
 
   async function generateBombList() {
     const allValues = Array.from({ length: xSize * ySize - 1 }, (_, i) => i);
@@ -32,8 +64,8 @@ function App() {
   }
 
   useEffect(() => {
+    
     async function generateBoardContent() {
-      console.log(bombList)
       const tempBoard = Array.from({ length: ySize }, () =>
         Array.from({ length: xSize }, () => 0)
       );
@@ -73,7 +105,6 @@ function App() {
           }
         }
       }
-      console.log(tempBoard);
       setBoard(tempBoard);
     }
     if (bombList.length !== 0) {
@@ -90,13 +121,32 @@ function App() {
         {board.map((row, rowIndex) => (
           <div key={rowIndex} className="row" style={{ display: 'flex', justifyContent: 'center' }}>
             {row.map((cell, columnIndex) => (
-              <Cell key={(rowIndex * xSize) + columnIndex} x={columnIndex} y={rowIndex} id={(rowIndex * xSize) + columnIndex} secret={cell}
-                bombList={bombList}></Cell>
+              <Cell 
+              key={(rowIndex * xSize) + columnIndex} 
+              x={columnIndex} 
+              y={rowIndex} 
+              id={(rowIndex * xSize) + columnIndex} 
+              openedList={openedList}
+              setOpenedList={setOpenedList}
+              secret={cell}
+              bombList={bombList}
+              board={board}
+              convertValues={convertValues}
+              pullCoord={pullCoord}
+              restartSignal={restartSignal}
+              setRestartSignal={setRestartSignal}
+              turnNumber={turnNumber}
+              setTurnNumber={setTurnNumber}
+              flagList={flagList}
+              setFlagList={setFlagList}
+              xSize={xSize}
+              ySize={ySize}
+              ></Cell>
             ))}
           </div>
         ))}
 
-
+              <button onClick={winCondition}>Check Win</button>
       </div>
     </>
   )
