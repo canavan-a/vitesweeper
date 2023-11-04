@@ -13,6 +13,7 @@ const Cell = (props) => {
     const {restartSignal ,setRestartSignal} = props;
     const {turnNumber, setTurnNumber} = props;
     const {flagList, setFlagList} = props;
+    const [holdState, setHoldState] = useState([]);
 
     const openCell = async () =>{
         if(flagList.includes(id)){return}
@@ -29,7 +30,7 @@ const Cell = (props) => {
         if(secret === 0){
 
             let start = await getTouchingZeros(x,y,[[x,y]])
-
+            
             while(true){
                 let copy = [...start]
                 
@@ -40,6 +41,7 @@ const Cell = (props) => {
                     start = [...copy]
                 }
                 else{
+                    setHoldState(copy);
                     console.log(copy.length);
                     
                     let temp = [...openedList]
@@ -52,6 +54,23 @@ const Cell = (props) => {
                     break;
                 }
             }
+
+            let copy = [...holdState]
+            for (const value in start){
+                copy = await addExtraLayer(start[value][0], start[value][1], copy)
+            }
+            let temp = [...openedList]
+            copy.forEach((element)=>{
+                if(!element.includes(-1) && !element.includes(15)){
+                    console.log(element)
+                    console.log(board[0][15])
+                    temp[convertValues(element[0],element[1])] = true
+                }
+                
+                
+            });
+            setOpenedList(temp);
+
             
         }
         
