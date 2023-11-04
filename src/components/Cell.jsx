@@ -217,7 +217,9 @@ const Cell = (props) => {
         <>  
             {openedList[id]?(
             <div  style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
-                {bombList.includes(id) ? '💣':secret}
+                {bombList.includes(id) ? '💣':
+                <>{secret === 0 ? '':secret}</>
+                }
             </div>
             ):(
             <div onClick={openCell} onContextMenu={handleRightClick} style={{ width: 25, height: 25, backgroundColor: 'gray', borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
