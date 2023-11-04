@@ -69,8 +69,8 @@ const Cell = (props) => {
                 
             });
             setOpenedList(temp);
-
             
+
         }
         
     }
@@ -198,7 +198,7 @@ const Cell = (props) => {
     }
 
 
-    const handleRightClick = (e) => {
+    const handleRightClick = async (e) => {
         e.preventDefault();
         if(flagList.includes(id)){
             const temp = [...flagList]

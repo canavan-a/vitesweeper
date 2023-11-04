@@ -6,7 +6,7 @@ import Cell from './components/cell'
 function App() {
   const [xSize, setXSize] = useState(12);
   const [ySize, setYSize] = useState(17);
-  const [totalBombs, setTotalBombs] = useState(10);
+  const [totalBombs, setTotalBombs] = useState(3);
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
   const [openedList, setOpenedList] = useState([]);
@@ -22,6 +22,25 @@ function App() {
     let x = Math.floor(item-(y*xSize))
     return [x,y]
   }
+
+    async function winCondition(){
+    const temp = [...openedList]
+    if (temp.length > 0){
+      let win = 'win'
+      let count = 0;
+      for(const element in temp){
+        if(temp[element]===false || temp[element] ===undefined){
+          // console.log(element);
+          count = count +1;
+        }
+      }
+      console.log('count');
+      console.log(count)
+
+
+    }
+    }
+    
 
 
   useEffect(() => {
@@ -127,7 +146,7 @@ function App() {
           </div>
         ))}
 
-
+              <button onClick={winCondition}>Check Win</button>
       </div>
     </>
   )
