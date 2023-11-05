@@ -5,8 +5,8 @@ import './App.css'
 import Cell from './components/cell'
 function App() {
   const [gameState, setGameState] = useState('pending')
-  const [xSize, setXSize] = useState(19);
-  const [ySize, setYSize] = useState(17);
+  const [xSize, setXSize] = useState(15);
+  const [ySize, setYSize] = useState(10);
   const [totalBombs, setTotalBombs] = useState(20);
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
@@ -155,6 +155,7 @@ function App() {
         ))}
 
               <button onClick={()=>{generateBombList();setRestartSignal(restartSignal+1)}}>Refresh</button>
+              <div>🚩{bombList.length - flagList.length}</div>
       </div>
     </>
   )
