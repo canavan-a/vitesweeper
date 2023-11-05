@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const Cell = (props) => {
     const { x } = props;
@@ -15,16 +15,26 @@ const Cell = (props) => {
     const {restartSignal ,setRestartSignal} = props;
     const {turnNumber, setTurnNumber} = props;
     const {flagList, setFlagList} = props;
+    const {entryPoint, setEntryPoint} = props;
     const [holdState, setHoldState] = useState([]);
+
+    useEffect(()=>{
+        if(entryPoint === id && board.length !== 0 ){
+            console.log(`retry: ${id}`);
+            openCell();
+        }
+    },[board]);
 
     const openCell = async () =>{
         if(flagList.includes(id)){return}
         if(secret !== 0 && turnNumber === 0){
             console.log('not zero retrying')
+            setEntryPoint(id);
             setRestartSignal(restartSignal+1);
+            
             return
         }
-        
+        setEntryPoint(null);
         setTurnNumber(turnNumber+1);
         const temp = [...openedList]
         temp[id] = true;

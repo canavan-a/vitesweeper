@@ -15,6 +15,8 @@ function App() {
   const [restartSignal, setRestartSignal] = useState(0);
   const [turnNumber, setTurnNumber] = useState(0); 
 
+  const [entryPoint, setEntryPoint] = useState(null);
+
   const convertValues = (x,y) =>{
     return x+((y)*xSize)
   }
@@ -145,6 +147,8 @@ function App() {
               setFlagList={setFlagList}
               xSize={xSize}
               ySize={ySize}
+              entryPoint={entryPoint}
+              setEntryPoint={setEntryPoint}
               ></Cell>
             ))}
           </div>
