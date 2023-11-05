@@ -241,15 +241,19 @@ const Cell = (props) => {
         }
     }, [openedList])
 
+    const clearSurrounding = async (e) =>{
 
-
-   const handleMouseEnter = () => {
-      setIsHover(true);
-   };
-   const handleMouseLeave = () => {
-      setIsHover(false);
-   };
-
+        if (e.button === 1) {
+            //count flags surrounding clicked must be === to number
+            //If this checks then
+            //run click on all of these somehow? 
+            // make a hook that triggers a click for a value and the changes condition after completed.
+            // sort of like a click queue
+            
+            console.log(y)
+            console.log(id)
+          }
+    }
 
 
     return (
@@ -257,7 +261,7 @@ const Cell = (props) => {
             {gameState === 'pending' ? (
                 <>
                     {openedList[id] ? (
-                        <div style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto',  userSelect: 'none' }}>
+                        <div onMouseDown={clearSurrounding} style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto',  userSelect: 'none' }}>
                             {bombList.includes(id) ? '💣':
                                 <>{secret === 0 ? '' : secret}</>
                             }
