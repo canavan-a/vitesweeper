@@ -18,9 +18,10 @@ const Cell = (props) => {
     const { entryPoint, setEntryPoint } = props;
     const [holdState, setHoldState] = useState([]);
     const { gameState, setGameState } = props;
+    const [isHover, setIsHover] = useState(false);
 
     const [killValue, setKillValue] = useState(null);
-    
+
     useEffect(()=>{
         setKillValue(null);
     },[restartSignal])
@@ -85,6 +86,7 @@ const Cell = (props) => {
 
 
             });
+            temp[id] = true;
             setOpenedList(temp);
 
 
@@ -241,24 +243,48 @@ const Cell = (props) => {
 
 
 
+   const handleMouseEnter = () => {
+      setIsHover(true);
+   };
+   const handleMouseLeave = () => {
+      setIsHover(false);
+   };
+
+
+
     return (
         <>
             {gameState === 'pending' ? (
                 <>
                     {openedList[id] ? (
-                        <div style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
+                        <div style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto',  userSelect: 'none' }}>
                             {bombList.includes(id) ? '💣':
                                 <>{secret === 0 ? '' : secret}</>
                             }
                         </div>
                     ) : (
-                        <div onClick={openCell} onContextMenu={handleRightClick} style={{ width: 25, height: 25, backgroundColor: 'gray', borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
+                        <div
+                        className='cell'
+                        onClick={openCell} 
+                        onContextMenu={handleRightClick}
+                        // onMouseEnter={handleMouseEnter}
+                        // onMouseLeave={handleMouseLeave} 
+                        style={{
+                                    width: 25, 
+                                    height: 25, 
+                                    backgroundColor: 'gray', 
+                                    borderColor: 'fff', 
+                                    borderWidth: 1, 
+                                    margin: 'auto',
+                                    transition: 'background-color 0.1s', 
+                                    userSelect: 'none',
+                                     }}>
                             {flagList.includes(id) ? '🚩' : ''}
                         </div>
                     )}
                 </>) : (
                 // if game is complete
-                <div style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
+                <div style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto', userSelect: 'none' }}>
                     {bombList.includes(id) ? id === killValue ? '💥':'💣' :
                         <>{secret === 0 ? '' : secret}</>
                     }
