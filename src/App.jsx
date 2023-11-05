@@ -4,6 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Cell from './components/cell'
 function App() {
+  const [gameState, setGameState] = useState('pending')
   const [xSize, setXSize] = useState(12);
   const [ySize, setYSize] = useState(17);
   const [totalBombs, setTotalBombs] = useState(3);
@@ -30,16 +31,18 @@ function App() {
       let count = 0;
       for(const element in temp){
         if(temp[element]===false || temp[element] ===undefined){
-          // console.log(element);
-          count = count +1;
+          if(!bombList.includes(parseInt(element))){
+            win = 'pending'
+          }
         }
       }
-      console.log('count');
-      console.log(count)
-
-
+      setGameState(win)
     }
     }
+
+    useEffect(()=>{
+      winCondition()
+    },[openedList])
     
 
 
@@ -116,6 +119,7 @@ function App() {
 
   return (
     <>
+      {gameState === 'win'? (<h1>You Win</h1>):(<></>)}
       <div>
 
         {board.map((row, rowIndex) => (
@@ -146,7 +150,7 @@ function App() {
           </div>
         ))}
 
-              <button onClick={winCondition}>Check Win</button>
+              <button onClick={()=>{generateBombList();setRestartSignal(restartSignal+1)}}>Refresh</button>
       </div>
     </>
   )
