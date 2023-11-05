@@ -4,15 +4,18 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Cell from './components/cell'
 function App() {
-  const [xSize, setXSize] = useState(12);
-  const [ySize, setYSize] = useState(17);
-  const [totalBombs, setTotalBombs] = useState(3);
+  const [gameState, setGameState] = useState('pending')
+  const [xSize, setXSize] = useState(15);
+  const [ySize, setYSize] = useState(10);
+  const [totalBombs, setTotalBombs] = useState(20);
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
   const [openedList, setOpenedList] = useState([]);
   const [flagList, setFlagList] = useState([]);
   const [restartSignal, setRestartSignal] = useState(0);
   const [turnNumber, setTurnNumber] = useState(0); 
+
+  const [entryPoint, setEntryPoint] = useState(null);
 
   const convertValues = (x,y) =>{
     return x+((y)*xSize)
@@ -23,23 +26,25 @@ function App() {
     return [x,y]
   }
 
-    async function winCondition(){
+  async function winCondition(){
     const temp = [...openedList]
     if (temp.length > 0){
       let win = 'win'
       let count = 0;
       for(const element in temp){
         if(temp[element]===false || temp[element] ===undefined){
-          // console.log(element);
-          count = count +1;
+          if(!bombList.includes(parseInt(element))){
+            win = 'pending'
+          }
         }
       }
-      console.log('count');
-      console.log(count)
-
-
+      setGameState(win)
     }
-    }
+  }
+
+  useEffect(()=>{
+    winCondition()
+  },[openedList])
     
 
 
@@ -116,6 +121,7 @@ function App() {
 
   return (
     <>
+      {gameState === 'win'? (<h1>You Win</h1>):(<></>)}
       <div>
 
         {board.map((row, rowIndex) => (
@@ -141,12 +147,15 @@ function App() {
               setFlagList={setFlagList}
               xSize={xSize}
               ySize={ySize}
+              entryPoint={entryPoint}
+              setEntryPoint={setEntryPoint}
               ></Cell>
             ))}
           </div>
         ))}
 
-              <button onClick={winCondition}>Check Win</button>
+              <button onClick={()=>{generateBombList();setRestartSignal(restartSignal+1)}}>Refresh</button>
+              <div>🚩{bombList.length - flagList.length}</div>
       </div>
     </>
   )
