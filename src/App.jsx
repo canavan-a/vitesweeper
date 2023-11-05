@@ -7,7 +7,7 @@ function App() {
   const [gameState, setGameState] = useState('pending')
   const [xSize, setXSize] = useState(15);
   const [ySize, setYSize] = useState(10);
-  const [totalBombs, setTotalBombs] = useState(20);
+  const [totalBombs, setTotalBombs] = useState(3);
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
   const [openedList, setOpenedList] = useState([]);
@@ -38,7 +38,10 @@ function App() {
           }
         }
       }
-      setGameState(win)
+      if (win === 'win'){
+        setGameState(win);
+      }
+      
     }
   }
 
@@ -122,6 +125,7 @@ function App() {
   return (
     <>
       {gameState === 'win'? (<h1>You Win</h1>):(<></>)}
+      {gameState === 'lost'? (<h1>You Lost</h1>):(<></>)}
       <div>
 
         {board.map((row, rowIndex) => (
@@ -149,12 +153,14 @@ function App() {
               ySize={ySize}
               entryPoint={entryPoint}
               setEntryPoint={setEntryPoint}
+              gameState={gameState}
+              setGameState={setGameState}
               ></Cell>
             ))}
           </div>
         ))}
 
-              <button onClick={()=>{generateBombList();setRestartSignal(restartSignal+1)}}>Refresh</button>
+              <button onClick={()=>{generateBombList();setRestartSignal(restartSignal+1);setGameState('pending');}}>Refresh</button>
               <div>🚩{bombList.length - flagList.length}</div>
       </div>
     </>
