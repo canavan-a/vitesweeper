@@ -225,7 +225,7 @@ const Cell = (props) => {
             </div>
             ):(
             <div onClick={openCell} onContextMenu={handleRightClick} style={{ width: 25, height: 25, backgroundColor: 'gray', borderColor: 'fff', borderWidth: 1, margin: 'auto' }}>
-                {flagList.includes(id)?'F':''}
+                {flagList.includes(id)?'🚩':''}
             </div>
             )}
         </>

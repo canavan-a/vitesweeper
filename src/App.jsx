@@ -5,9 +5,9 @@ import './App.css'
 import Cell from './components/cell'
 function App() {
   const [gameState, setGameState] = useState('pending')
-  const [xSize, setXSize] = useState(12);
+  const [xSize, setXSize] = useState(19);
   const [ySize, setYSize] = useState(17);
-  const [totalBombs, setTotalBombs] = useState(3);
+  const [totalBombs, setTotalBombs] = useState(20);
   const [bombList, setBombList] = useState([]);
   const [board, setBoard] = useState([]);
   const [openedList, setOpenedList] = useState([]);
@@ -24,7 +24,7 @@ function App() {
     return [x,y]
   }
 
-    async function winCondition(){
+  async function winCondition(){
     const temp = [...openedList]
     if (temp.length > 0){
       let win = 'win'
@@ -38,11 +38,11 @@ function App() {
       }
       setGameState(win)
     }
-    }
+  }
 
-    useEffect(()=>{
-      winCondition()
-    },[openedList])
+  useEffect(()=>{
+    winCondition()
+  },[openedList])
     
 
 
