@@ -53,14 +53,17 @@ function MineSweeper(props) {
   useEffect(() => {
     async function initBoard() {
       const temp = Array.from({ length: ySize*xSize - 1 }, () => false);
+      
       setTriggerOpenList(temp);
       setOpenedList(temp);
       setFlagList([]);
       await generateBombList();
+      
     }
-    initBoard();
     setTurnNumber(0);
-  }, [xSize, ySize, restartSignal]);
+    initBoard();
+    
+  }, [restartSignal]);
 
   async function generateBombList() {
     const allValues = Array.from({ length: xSize * ySize - 1 }, (_, i) => i);
@@ -131,7 +134,7 @@ function MineSweeper(props) {
   return (
     <>
     <button onClick={testOpen}>Test TOL</button>
-    <button onClick={()=>{generateBombList();setRestartSignal(restartSignal+1);setGameState('pending');}}>
+    <button onClick={()=>{setRestartSignal(restartSignal+1);setGameState('pending');}}>
     {gameState === 'win'? (<>You Win</>):(<></>)}
       {gameState === 'lost'? (<>You Lost</>):(<></>)}
       {gameState === 'pending'? (<>Restart</>):(<></>)}
