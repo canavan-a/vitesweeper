@@ -18,13 +18,25 @@ const Cell = (props) => {
     const { entryPoint, setEntryPoint } = props;
     const [holdState, setHoldState] = useState([]);
     const { gameState, setGameState } = props;
+    const { triggerOpenList, setTriggerOpenList } = props;
     const [isHover, setIsHover] = useState(false);
 
     const [killValue, setKillValue] = useState(null);
 
     useEffect(()=>{
         setKillValue(null);
-    },[restartSignal])
+    },[restartSignal]);
+
+    useEffect(()=>{
+        if(triggerOpenList.length > 0){
+            if(triggerOpenList[id] && !openedList[id]){
+                let temp = [...triggerOpenList]
+                temp[id] = false;
+                setTriggerOpenList(temp);
+                openCell()
+            }
+        }
+    },[triggerOpenList])
 
     useEffect(() => {
         if (entryPoint === id && board.length !== 0) {
@@ -246,9 +258,8 @@ const Cell = (props) => {
         if (e.button === 1) {
             //count flags surrounding clicked must be === to number
             //If this checks then
-            //run click on all of these somehow? 
-            // make a hook that triggers a click for a value and the changes condition after completed.
-            // sort of like a click queue
+            
+            
             
             console.log(y)
             console.log(id)

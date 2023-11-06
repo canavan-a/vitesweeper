@@ -15,6 +15,8 @@ function MineSweeper(props) {
 
   const [entryPoint, setEntryPoint] = useState(null);
 
+  const [triggerOpenList, setTriggerOpenList] = useState([]);
+
   const convertValues = (x,y) =>{
     return x+((y)*xSize)
   }
@@ -30,7 +32,7 @@ function MineSweeper(props) {
       let win = 'win'
       let count = 0;
       for(const element in temp){
-        if(temp[element]===false || temp[element] ===undefined){
+        if(temp[element]===false || temp[element] === undefined){
           if(!bombList.includes(parseInt(element))){
             win = 'pending'
           }
@@ -48,10 +50,10 @@ function MineSweeper(props) {
   },[openedList])
     
 
-
   useEffect(() => {
     async function initBoard() {
-      const temp = Array.from({ length: ySize }, () => false);
+      const temp = Array.from({ length: ySize*xSize - 1 }, () => false);
+      setTriggerOpenList(temp);
       setOpenedList(temp);
       setFlagList([]);
       await generateBombList();
@@ -120,9 +122,15 @@ function MineSweeper(props) {
   }, [bombList])
 
 
+  const testOpen = () =>{
+    let temp = [...triggerOpenList];
+    temp[5] = true;
+    setTriggerOpenList(temp); 
+  }
+
   return (
     <>
-    
+    <button onClick={testOpen}>Test TOL</button>
     <button onClick={()=>{generateBombList();setRestartSignal(restartSignal+1);setGameState('pending');}}>
     {gameState === 'win'? (<>You Win</>):(<></>)}
       {gameState === 'lost'? (<>You Lost</>):(<></>)}
@@ -159,6 +167,8 @@ function MineSweeper(props) {
               setEntryPoint={setEntryPoint}
               gameState={gameState}
               setGameState={setGameState}
+              triggerOpenList={triggerOpenList}
+              setTriggerOpenList={setTriggerOpenList}
               ></Cell>
             ))}
           </div>
