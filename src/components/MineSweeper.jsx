@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Cell from './cell'
+import Cell from './Cell';
 
 function MineSweeper(props) {
   const [gameState, setGameState] = useState('pending')

@@ -80,7 +80,8 @@ const Cell = (props) => {
 
                         temp[convertValues(element[0], element[1])] = true
 
-                    });
+                    });console.log('just zeroes')
+                    console.log(copy);
                     setOpenedList(temp);
                     break;
                 }
@@ -99,6 +100,7 @@ const Cell = (props) => {
 
             });
             temp[id] = true;
+            console.log(copy);
             setOpenedList(temp);
 
 
@@ -166,6 +168,7 @@ const Cell = (props) => {
 
         try {
             if (!containsPair(output, [x + 1, y])) {
+                board[y][x+1]
                 output.push([x + 1, y]);
 
             }
@@ -173,42 +176,49 @@ const Cell = (props) => {
 
         try {
             if (!containsPair(output, [x - 1, y])) {
+                board[y][x-1]
                 output.push([x - 1, y]);
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x, y + 1])) {
+                board[y+1][x]
                 output.push([x, y + 1]);
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x, y - 1])) {
+                board[y-1][x]
                 output.push([x, y - 1]);
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x + 1, y + 1])) {
+                board[y+1][x+1]
                 output.push([x + 1, y + 1]);
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y - 1])) {
+                board[y-1][x-1]
                 output.push([x - 1, y - 1]);
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x + 1, y - 1])) {
+                board[y-1][x+1]
                 output.push([x + 1, y - 1]);
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y + 1])) {
+                board[y+1][x-1]
                 output.push([x - 1, y + 1]);
             }
         } catch { }
@@ -246,7 +256,7 @@ const Cell = (props) => {
 
     //condition for losing
     useEffect(() => {
-        if (openedList[id] && bombList.includes(id)) {
+        if (openedList[id] && bombList.includes(id) && entryPoint==null) {
             setKillValue(id);
             setGameState('lost');
             console.log('L');
