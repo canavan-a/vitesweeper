@@ -16,7 +16,6 @@ const Cell = (props) => {
     const { turnNumber, setTurnNumber } = props;
     const { flagList, setFlagList } = props;
     const { entryPoint, setEntryPoint } = props;
-    const [holdState, setHoldState] = useState([]);
     const { gameState, setGameState } = props;
     const { triggerOpenList, setTriggerOpenList } = props;
     const [isHover, setIsHover] = useState(false);
@@ -24,7 +23,9 @@ const Cell = (props) => {
     const [killValue, setKillValue] = useState(null);
 
     useEffect(()=>{
+        
         setKillValue(null);
+
     },[restartSignal]);
 
     useEffect(()=>{
@@ -73,7 +74,7 @@ const Cell = (props) => {
                     start = [...copy]
                 }
                 else {
-                    setHoldState(copy);
+                    // setHoldState([...copy]);
 
                     let temp = [...openedList]
                     copy.forEach((element) => {
@@ -82,26 +83,31 @@ const Cell = (props) => {
 
                     });console.log('just zeroes')
                     console.log(copy);
-                    setOpenedList(temp);
+
+                    //begin extra layer
+                    for (const value in start) {
+                        copy = await addExtraLayer(start[value][0], start[value][1], copy)
+                    }
+                    let t = [...openedList]
+                    copy.forEach((element) => {
+                        if (!element.includes(-1) && !(element[0] === xSize) && !(element[1] === ySize)) {
+                            t[convertValues(element[0], element[1])] = true
+                        }
+        
+        
+                    });
+                    t[id] = true;
+                    console.log(copy);
+
+                    setOpenedList(t);
                     break;
                 }
             }
-
-            let copy = [...holdState]
-            for (const value in start) {
-                copy = await addExtraLayer(start[value][0], start[value][1], copy)
-            }
-            let temp = [...openedList]
-            copy.forEach((element) => {
-                if (!element.includes(-1) && !(element[0] === xSize) && !(element[1] === ySize)) {
-                    temp[convertValues(element[0], element[1])] = true
-                }
-
-
-            });
-            temp[id] = true;
-            console.log(copy);
-            setOpenedList(temp);
+            
+            // let copy = [...holdState]
+            
+            
+            // setOpenedList(temp);
 
 
         }
@@ -165,61 +171,70 @@ const Cell = (props) => {
 
     async function addExtraLayer(x, y, previousCoords) {
         let output = [...previousCoords]
-
+        console.log('b'>=0)
         try {
             if (!containsPair(output, [x + 1, y])) {
-                board[y][x+1]
-                output.push([x + 1, y]);
+                if(board[y][x+1] !== 'b'){
+                    output.push([x + 1, y]);
+                }  
+                
 
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y])) {
-                board[y][x-1]
+                if(board[y][x-1] !== 'b'){
                 output.push([x - 1, y]);
+                }
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x, y + 1])) {
-                board[y+1][x]
+                if(board[y+1][x] !== 'b'){
                 output.push([x, y + 1]);
+                }
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x, y - 1])) {
-                board[y-1][x]
-                output.push([x, y - 1]);
+                if(board[y-1][x] !== 'b'){
+                    output.push([x, y - 1]);
+                }
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x + 1, y + 1])) {
-                board[y+1][x+1]
-                output.push([x + 1, y + 1]);
+                if(board[y+1][x+1] !== 'b'){
+                    output.push([x + 1, y + 1]);
+                }
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y - 1])) {
-                board[y-1][x-1]
+                if(board[y-1][x-1] !== 'b'){
                 output.push([x - 1, y - 1]);
+                }
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x + 1, y - 1])) {
-                board[y-1][x+1]
+                if(board[y-1][x+1] !== 'b'){
                 output.push([x + 1, y - 1]);
+                }
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y + 1])) {
-                board[y+1][x-1]
+                if(board[y+1][x-1] !== 'b'){
                 output.push([x - 1, y + 1]);
+                }
             }
         } catch { }
 
@@ -254,7 +269,7 @@ const Cell = (props) => {
 
     }
 
-    //condition for losing
+    // condition for losing
     useEffect(() => {
         if (openedList[id] && bombList.includes(id) && entryPoint==null) {
             setKillValue(id);

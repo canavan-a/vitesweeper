@@ -52,15 +52,16 @@ function MineSweeper(props) {
 
   useEffect(() => {
     async function initBoard() {
+      setTurnNumber(0);
       const temp = Array.from({ length: ySize*xSize - 1 }, () => false);
       
-      setTriggerOpenList(temp);
-      setOpenedList(temp);
+      setTriggerOpenList([...temp]);
+      setOpenedList([...temp]);
       setFlagList([]);
       await generateBombList();
       
     }
-    setTurnNumber(0);
+    
     initBoard();
     
   }, [restartSignal]);
