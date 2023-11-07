@@ -81,8 +81,8 @@ const Cell = (props) => {
 
                         temp[convertValues(element[0], element[1])] = true
 
-                    });console.log('just zeroes')
-                    console.log(copy);
+                    });
+
 
                     //begin extra layer
                     for (const value in start) {
@@ -97,7 +97,6 @@ const Cell = (props) => {
         
                     });
                     t[id] = true;
-                    console.log(copy);
 
                     setOpenedList(t);
                     break;
@@ -171,7 +170,6 @@ const Cell = (props) => {
 
     async function addExtraLayer(x, y, previousCoords) {
         let output = [...previousCoords]
-        console.log('b'>=0)
         try {
             if (!containsPair(output, [x + 1, y])) {
                 if(board[y][x+1] !== 'b'){
@@ -279,15 +277,29 @@ const Cell = (props) => {
     }, [openedList])
 
     const clearSurrounding = async (e) =>{
+        
 
         if (e.button === 1) {
             //count flags surrounding clicked must be === to number
             //If this checks then
-            
-            
-            
-            console.log(y)
-            console.log(id)
+            // console.log('middle')
+            console.log('middle click')
+            setTriggerOpenList((prevList)=>{
+                const updatedList = [...prevList];
+                const aroundCoordinates = addExtraLayer(x,y,[])
+                //take aroundCoords and only add values that are within proper bounds
+                console.log(aroundCoordinates)
+                const possibleClicks = [id+1, id-1, id-xSize, id+xSize, id+xSize+1, id+xSize-1, id-xSize, id-xSize+1, id-xSize-1 ]
+                //check these values
+                
+                for(const element in possibleClicks){
+                    if(possibleClicks[element] >=0 && possibleClicks[element] < (xSize*ySize)){
+                        updatedList[possibleClicks[element]] = true;
+                    }
+                    
+                }   
+                return updatedList;
+            });
           }
     }
 
