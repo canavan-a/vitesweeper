@@ -134,7 +134,7 @@ function MineSweeper(props) {
 
   return (
     <>
-    <button onClick={testOpen}>Test TOL</button>
+    {/* <button onClick={testOpen}>Test TOL</button> */}
     <button onClick={()=>{setRestartSignal(restartSignal+1);setGameState('pending');}}>
     {gameState === 'win'? (<>You Win</>):(<></>)}
       {gameState === 'lost'? (<>You Lost</>):(<></>)}
