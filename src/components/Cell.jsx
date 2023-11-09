@@ -22,22 +22,22 @@ const Cell = (props) => {
 
     const [killValue, setKillValue] = useState(null);
 
-    useEffect(()=>{
-        
+    useEffect(() => {
+
         setKillValue(null);
 
-    },[restartSignal]);
+    }, [restartSignal]);
 
-    useEffect(()=>{
-        if(triggerOpenList.length > 0){
-            if(triggerOpenList[id] && !openedList[id]){
+    useEffect(() => {
+        if (triggerOpenList.length > 0) {
+            if (triggerOpenList[id] && !openedList[id]) {
                 let temp = [...triggerOpenList]
                 temp[id] = false;
                 setTriggerOpenList(temp);
                 openCell()
             }
         }
-    },[triggerOpenList])
+    }, [triggerOpenList])
 
     useEffect(() => {
         if (entryPoint === id && board.length !== 0) {
@@ -93,8 +93,8 @@ const Cell = (props) => {
                         if (!element.includes(-1) && !(element[0] === xSize) && !(element[1] === ySize)) {
                             t[convertValues(element[0], element[1])] = true
                         }
-        
-        
+
+
                     });
                     t[id] = true;
 
@@ -102,10 +102,10 @@ const Cell = (props) => {
                     break;
                 }
             }
-            
+
             // let copy = [...holdState]
-            
-            
+
+
             // setOpenedList(temp);
 
 
@@ -172,67 +172,67 @@ const Cell = (props) => {
         let output = [...previousCoords]
         try {
             if (!containsPair(output, [x + 1, y])) {
-                if(board[y][x+1] !== 'b'){
-                    output.push([x + 1, y]);
-                }  
-                
+                board[y][x + 1] !== 'b'
+                output.push([x + 1, y])
+
+
 
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y])) {
-                if(board[y][x-1] !== 'b'){
-                output.push([x - 1, y]);
-                }
+                board[y][x - 1] !== 'b'
+                output.push([x - 1, y])
+
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x, y + 1])) {
-                if(board[y+1][x] !== 'b'){
-                output.push([x, y + 1]);
-                }
+                board[y + 1][x] !== 'b'
+                output.push([x, y + 1])
+
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x, y - 1])) {
-                if(board[y-1][x] !== 'b'){
-                    output.push([x, y - 1]);
-                }
+                board[y - 1][x] !== 'b'
+                output.push([x, y - 1])
+
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x + 1, y + 1])) {
-                if(board[y+1][x+1] !== 'b'){
-                    output.push([x + 1, y + 1]);
-                }
+                board[y + 1][x + 1] !== 'b'
+                output.push([x + 1, y + 1])
+
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y - 1])) {
-                if(board[y-1][x-1] !== 'b'){
-                output.push([x - 1, y - 1]);
-                }
+                board[y - 1][x - 1] !== 'b'
+                output.push([x - 1, y - 1])
+
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x + 1, y - 1])) {
-                if(board[y-1][x+1] !== 'b'){
-                output.push([x + 1, y - 1]);
-                }
+                board[y - 1][x + 1] !== 'b'
+                output.push([x + 1, y - 1])
+
             }
         } catch { }
 
         try {
             if (!containsPair(output, [x - 1, y + 1])) {
-                if(board[y+1][x-1] !== 'b'){
-                output.push([x - 1, y + 1]);
-                }
+                board[y + 1][x - 1] !== 'b'
+                output.push([x - 1, y + 1])
+
             }
         } catch { }
 
@@ -269,38 +269,60 @@ const Cell = (props) => {
 
     // condition for losing
     useEffect(() => {
-        if (openedList[id] && bombList.includes(id) && entryPoint==null) {
+        if (openedList[id] && bombList.includes(id) && entryPoint == null) {
             setKillValue(id);
             setGameState('lost');
             console.log('L');
         }
-    }, [openedList])
+    }, [openedList]);
 
-    const clearSurrounding = async (e) =>{
-        
+
+
+    const clearSurrounding = async (e) => {
+
 
         if (e.button === 1) {
             //count flags surrounding clicked must be === to number
             //If this checks then
             // console.log('middle')
             console.log('middle click')
-            setTriggerOpenList((prevList)=>{
-                const updatedList = [...prevList];
-                const aroundCoordinates = addExtraLayer(x,y,[])
-                //take aroundCoords and only add values that are within proper bounds
-                console.log(aroundCoordinates)
-                const possibleClicks = [id+1, id-1, id-xSize, id+xSize, id+xSize+1, id+xSize-1, id-xSize, id-xSize+1, id-xSize-1 ]
-                //check these values
-                
-                for(const element in possibleClicks){
-                    if(possibleClicks[element] >=0 && possibleClicks[element] < (xSize*ySize)){
-                        updatedList[possibleClicks[element]] = true;
+            const aroundCoordinates = await addExtraLayer(x, y, []);
+            const validatedCoordinates = []
+            let counter = 0;
+            for (const m in aroundCoordinates) {
+                if (validCoordinate(aroundCoordinates[m])) {
+                    if (flagList.includes(convertValues(aroundCoordinates[m][0], aroundCoordinates[m][1]))) { counter++; }
+                    validatedCoordinates.push(convertValues(aroundCoordinates[m][0], aroundCoordinates[m][1]))
+                }
+            }
+            console.log()
+            console.log(counter)
+            if (board[y][x] == counter) {
+                setTriggerOpenList((prevList) => {
+                    const updatedList = [...prevList];
+                    for (const element in validatedCoordinates) {
+                        if (validatedCoordinates[element] >= 0 && validatedCoordinates[element] < (xSize * ySize)) {
+                            updatedList[validatedCoordinates[element]] = true;
+                        }
+
                     }
-                    
-                }   
-                return updatedList;
-            });
-          }
+                    return updatedList;
+                });
+            }
+
+        }
+    }
+
+    const validCoordinate = (coord) => {
+        if (coord[0] < 0 || coord[0] === xSize) {
+            return false
+        }
+        else if (coord[1] < 0 || coord[1] === ySize) {
+            return false
+        }
+        else {
+            return true
+        }
     }
 
 
@@ -309,35 +331,35 @@ const Cell = (props) => {
             {gameState === 'pending' ? (
                 <>
                     {openedList[id] ? (
-                        <div onMouseDown={clearSurrounding} style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto',  userSelect: 'none' }}>
-                            {bombList.includes(id) ? '💣':
+                        <div onMouseDown={clearSurrounding} style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto', userSelect: 'none' }}>
+                            {bombList.includes(id) ? '💣' :
                                 <>{secret === 0 ? '' : secret}</>
                             }
                         </div>
                     ) : (
                         <div
-                        className='cell'
-                        onClick={openCell} 
-                        onContextMenu={handleRightClick}
-                        // onMouseEnter={handleMouseEnter}
-                        // onMouseLeave={handleMouseLeave} 
-                        style={{
-                                    width: 25, 
-                                    height: 25, 
-                                    backgroundColor: 'gray', 
-                                    borderColor: 'fff', 
-                                    borderWidth: 1, 
-                                    margin: 'auto',
-                                    transition: 'background-color 0.1s', 
-                                    userSelect: 'none',
-                                     }}>
+                            className='cell'
+                            onClick={openCell}
+                            onContextMenu={handleRightClick}
+                            // onMouseEnter={handleMouseEnter}
+                            // onMouseLeave={handleMouseLeave} 
+                            style={{
+                                width: 25,
+                                height: 25,
+                                backgroundColor: 'gray',
+                                borderColor: 'fff',
+                                borderWidth: 1,
+                                margin: 'auto',
+                                transition: 'background-color 0.1s',
+                                userSelect: 'none',
+                            }}>
                             {flagList.includes(id) ? '🚩' : ''}
                         </div>
                     )}
                 </>) : (
                 // if game is complete
                 <div style={{ width: 25, height: 25, borderColor: 'fff', borderWidth: 1, margin: 'auto', userSelect: 'none' }}>
-                    {bombList.includes(id) ? id === killValue ? '💥':'💣' :
+                    {bombList.includes(id) ? id === killValue ? '💥' : '💣' :
                         <>{secret === 0 ? '' : secret}</>
                     }
                 </div>
