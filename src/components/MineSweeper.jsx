@@ -17,6 +17,18 @@ function MineSweeper(props) {
 
   const [triggerOpenList, setTriggerOpenList] = useState([]);
 
+  const [timerState, setTimerState] = useState('pending');
+  const [time, setTime] = useState(0);
+
+  useEffect(()=>{
+    if(timerState === 'started'){
+      const t = setTimeout(()=>{
+        setTime((old)=>(old+1));
+      },1000);
+      return () => clearTimeout(t);
+    }
+  },[time, timerState]);
+
   const convertValues = (x,y) =>{
     return x+((y)*xSize)
   }
@@ -59,6 +71,9 @@ function MineSweeper(props) {
       setOpenedList([...temp]);
       setFlagList([]);
       await generateBombList();
+      //timer info
+      setTimerState('pending');
+      setTime(0);
       
     }
     
@@ -140,7 +155,7 @@ function MineSweeper(props) {
       {gameState === 'lost'? (<>You Lost</>):(<></>)}
       {gameState === 'pending'? (<>Restart</>):(<></>)}
     </button>
-              
+    <div>{time}</div>
       
       <div>
 
@@ -173,6 +188,8 @@ function MineSweeper(props) {
               setGameState={setGameState}
               triggerOpenList={triggerOpenList}
               setTriggerOpenList={setTriggerOpenList}
+              setTime={setTime}
+              setTimerState={setTimerState}
               ></Cell>
             ))}
           </div>
