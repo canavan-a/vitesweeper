@@ -24,7 +24,8 @@ function MineSweeper(props) {
     if(timerState === 'started'){
       const t = setTimeout(()=>{
         setTime((old)=>(old+1));
-      },1000)
+      },1000);
+      return () => clearTimeout(t);
     }
   },[time, timerState]);
 
