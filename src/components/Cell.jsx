@@ -18,6 +18,9 @@ const Cell = (props) => {
     const { entryPoint, setEntryPoint } = props;
     const { gameState, setGameState } = props;
     const { triggerOpenList, setTriggerOpenList } = props;
+
+    const {setTimerState} = props;
+
     const [isHover, setIsHover] = useState(false);
 
     const [killValue, setKillValue] = useState(null);
@@ -52,9 +55,10 @@ const Cell = (props) => {
             console.log('not zero retrying')
             setEntryPoint(id);
             setRestartSignal(restartSignal + 1);
-
+            
             return
         }
+        setTimerState('started');
         setEntryPoint(null);
         setTurnNumber(turnNumber + 1);
         const temp = [...openedList]
@@ -271,6 +275,7 @@ const Cell = (props) => {
     useEffect(() => {
         if (openedList[id] && bombList.includes(id) && entryPoint == null) {
             setKillValue(id);
+            setTimerState('stopped');
             setGameState('lost');
             console.log('L');
         }

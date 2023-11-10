@@ -19,6 +19,8 @@ function App() {
     };
   }, []);
 
+  
+
   return (
     <>
       <MineSweeper x={30} y={16} bombs={99} />
