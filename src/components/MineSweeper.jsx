@@ -51,6 +51,7 @@ function MineSweeper(props) {
         }
       }
       if (win === 'win'){
+        setTimerState('win');
         setGameState(win);
       }
       
@@ -79,7 +80,7 @@ function MineSweeper(props) {
     
     initBoard();
     
-  }, [restartSignal]);
+  }, [restartSignal, xSize, ySize]);
 
   async function generateBombList() {
     const allValues = Array.from({ length: xSize * ySize - 1 }, (_, i) => i);

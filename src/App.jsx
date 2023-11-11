@@ -19,11 +19,52 @@ function App() {
     };
   }, []);
 
+  const [x, setX] = useState(null);
+  const [y, setY] = useState(null);
+  const [bombs, setBombs] = useState(null);
+
+  const [size, setSize] = useState(null);
+
+  useEffect(()=>{
+    if(size != null){
+      if(size === 'small'){
+        setX(9);
+        setY(9);
+        setBombs(10);
+      }
+      else if(size === 'medium'){
+        setX(16);
+        setY(16);
+        setBombs(40);
+      }
+      else if(size === 'large'){
+        setX(30);
+        setY(16);
+        setBombs(99);
+      }
+      else{
+        console.error('error');
+      }
+    }
+  },[size])
+
+
   
 
   return (
     <>
-      <MineSweeper x={30} y={16} bombs={99} />
+
+    {size === null && x === null?(
+      <>
+        <button onClick={()=>{setSize('small')}}>Beginner</button>
+        <button onClick={()=>{setSize('medium')}}>Intermediate</button>
+        <button onClick={()=>{setSize('large')}}>Expert</button>
+      </>
+    ):(
+      <>
+        <MineSweeper x={x} y={y} bombs={bombs} />
+      </>
+      )}
       
     </>
   )
