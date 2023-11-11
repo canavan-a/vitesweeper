@@ -56,9 +56,13 @@ function App() {
 
     {size === null && x === null?(
       <>
+      
+      <div>
         <button onClick={()=>{setSize('small')}}>Beginner</button>
         <button onClick={()=>{setSize('medium')}}>Intermediate</button>
         <button onClick={()=>{setSize('large')}}>Expert</button>
+      </div>
+      <div style={{marginTop:10}}>vitesweeper by <a href="https://github.com/canavan-a">canavan-a</a></div>
       </>
     ):(
       <>
