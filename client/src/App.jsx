@@ -7,6 +7,7 @@ import Home from './components/Home';
 import Leaderboard from './components/Leaderboard';
 import {GameContextProvider}  from './context/GameContext';
 import useDisableRightClick from './hooks/useDisableRightClick';
+import NotFound from './components/NotFound';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/intermediate" element={<MineSweeper x={16} y={16} bombs={40} />} />
             <Route path="/expert" element={<MineSweeper x={30} y={16} bombs={99} />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
       </GameContextProvider>
