@@ -1,8 +1,9 @@
-# React + Vite
+# React + Vite Minesweeper Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Minesweeper game built with Vite. 
 
-Currently, two official plugins are available:
+![image](https://github.com/canavan-a/vitesweeper/assets/127001388/8e4bb65d-d39d-4948-84b4-c0b1366553a8)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![image](https://github.com/canavan-a/vitesweeper/assets/127001388/a216c966-c645-4ab4-84c3-b7eaf67200b2)
+
+
