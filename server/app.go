@@ -2,34 +2,22 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
-
-func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("templates/index.html")
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	err = tmpl.Execute(w, nil)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-}
 
 func main() {
 
-	r := mux.NewRouter()
+	r := gin.Default()
+	r.LoadHTMLGlob("templates/*")
 
-	r.PathPrefix("/").HandlerFunc(IndexHandler)
+	r.Static("/static", "./static")
 
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
-	http.Handle("/", r)
-	fmt.Println("Server started on :8080")
-	http.ListenAndServe(":8080", nil)
+	r.NoRoute(func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+
+	fmt.Println("server has started")
+	r.Run(":8080")
 }
