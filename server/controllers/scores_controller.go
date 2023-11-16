@@ -62,3 +62,42 @@ func GetAllScores(c *gin.Context) {
 	//send data to client
 	c.JSON(http.StatusOK, scores)
 }
+
+type LeaderboardEntry struct {
+	Score    int    `json:"score"`
+	Username string `json:"username"`
+	Size     string `json:"size"`
+}
+
+func PushScore(c *gin.Context) {
+
+	//INSERT INTO scores (score, username, board_size) VALUES (300, 'ac_123', 'medium');
+	var entry LeaderboardEntry
+
+	//bind json payload to the struct
+	if err := c.ShouldBindJSON(&entry); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	connStr := os.Getenv("PG_CONN_STR")
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer db.Close()
+
+	// INSERT statement
+	result, err := db.Exec("INSERT INTO scores (username, score, board_size) VALUES ($1, $2, $3);", entry.Username, entry.Score, entry.Size)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert data"})
+		return
+	}
+
+	// Check the number of rows affected by the insert
+	rowsAffected, _ := result.RowsAffected()
+	fmt.Printf("Rows affected by insert: %d\n", rowsAffected)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Score Updated successfully"})
+}

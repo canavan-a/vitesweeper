@@ -27,7 +27,9 @@ func main() {
 
 	r.Static("/static", "./static")
 
-	r.GET("/query", controllers.GetAllScores)
+	r.GET("/allscores", controllers.GetAllScores)
+
+	r.POST("/pushscore", controllers.PushScore)
 
 	r.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
