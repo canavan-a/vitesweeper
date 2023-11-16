@@ -34,7 +34,7 @@ func GetAllScores(c *gin.Context) {
 	defer db.Close()
 
 	//select all scores from the database
-	rows, err := db.Query("SELECT id, username, score FROM scores where board_size = $1;", size)
+	rows, err := db.Query("SELECT id, username, score FROM scores where board_size = $1 ORDER BY SCORE DESC;", size)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect size value"})
