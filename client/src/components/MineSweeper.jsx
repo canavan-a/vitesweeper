@@ -166,9 +166,9 @@ function MineSweeper(props) {
       {gameState === 'pending'? (<>Restart</>):(<></>)}
     </button>
     
-    <div>{time}</div>
-    {gameState !== 'win'?(<div style={{color:"yellowgreen"}}>Score: <b>{time}</b></div>):(<div>{time}</div>)}
-    {gameState !== 'win'? (<WinPanel time={time}/>):(<></>)}
+    {/* <div>{time}</div> */}
+    {gameState === 'win'?(<div style={{color:"yellowgreen"}}>Score: <b>{time}</b></div>):(<div>{time}</div>)}
+    {gameState === 'win'? (<WinPanel time={time}/>):(<></>)}
       
       <div>
 
