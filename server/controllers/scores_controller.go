@@ -34,7 +34,7 @@ func GetAllScores(c *gin.Context) {
 	defer db.Close()
 
 	//select all scores from the database
-	rows, err := db.Query("SELECT id, username, score FROM scores where board_size = $1;", size)
+	rows, err := db.Query("SELECT id, username, score FROM scores where board_size = $1 ORDER BY SCORE ASC;", size)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect size value"})
@@ -59,8 +59,12 @@ func GetAllScores(c *gin.Context) {
 		return
 	}
 
-	//send data to client
-	c.JSON(http.StatusOK, scores)
+	if len(scores) == 0 {
+		c.JSON(http.StatusOK, []UserScore{})
+	} else {
+		c.JSON(http.StatusOK, scores)
+	}
+
 }
 
 type LeaderboardEntry struct {

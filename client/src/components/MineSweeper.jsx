@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import Cell from './Cell';
+import GameContext from '../context/GameContext';
+import WinPanel from './WinPanel';
 
 function MineSweeper(props) {
   const [gameState, setGameState] = useState('pending')
@@ -19,6 +21,13 @@ function MineSweeper(props) {
 
   const [timerState, setTimerState] = useState('pending');
   const [time, setTime] = useState(0);
+
+  const {gameSize} = props;
+  const {currentGameType, setCurrentGameType} = useContext(GameContext);
+
+  useEffect(()=>{
+    setCurrentGameType(gameSize);
+  },[])
 
   useEffect(()=>{
     if(timerState === 'started'){
@@ -152,11 +161,14 @@ function MineSweeper(props) {
     <>
     {/* <button onClick={testOpen}>Test TOL</button> */}
     <button onClick={()=>{setRestartSignal(restartSignal+1);setGameState('pending');}}>
-    {gameState === 'win'? (<>You Win</>):(<></>)}
+      {gameState === 'win'? (<>Play Again</>):(<></>)}
       {gameState === 'lost'? (<>You Lost</>):(<></>)}
       {gameState === 'pending'? (<>Restart</>):(<></>)}
     </button>
-    <div>{time}</div>
+    
+    {/* <div>{time}</div> */}
+    {gameState === 'win'?(<div style={{color:"yellowgreen"}}>Score: <b>{time}</b></div>):(<div>{time}</div>)}
+    {gameState === 'win'? (<WinPanel time={time}/>):(<></>)}
       
       <div>
 
