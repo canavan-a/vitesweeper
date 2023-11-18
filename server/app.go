@@ -19,6 +19,9 @@ func main() {
 		fmt.Println("Error loading .env file")
 	}
 
+	//set mode to release mode
+	gin.SetMode(gin.ReleaseMode)
+
 	r := gin.Default()
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"*"}
@@ -40,5 +43,5 @@ func main() {
 	})
 
 	fmt.Println("server has started")
-	r.Run(":8080")
+	r.Run(":80")
 }
