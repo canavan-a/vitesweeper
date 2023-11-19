@@ -25,6 +25,7 @@ COPY --from=builder /server/myapp .
 COPY --from=builder /server/templates /server/templates
 COPY --from=builder /server/static /server/static
 COPY --from=builder /server/.env /server/.env
+COPY --from=builder /server/.env /server/README.md
 
 # Expose the port (adjust as needed)
 EXPOSE 80
