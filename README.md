@@ -1,4 +1,4 @@
-# Vite + Go Minesweeper Game
+# Vite + Go Minesweeper
 
 ### Play here:
 
