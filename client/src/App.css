@@ -89,3 +89,7 @@ tbody tr:nth-child(even) {
 input::placeholder{
   overflow: visible;
 }
+
+.selected-score {
+  background-color: red; /* Adjust the width as needed */
+}

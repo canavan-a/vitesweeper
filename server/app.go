@@ -38,6 +38,8 @@ func main() {
 
 	r.POST("/pushscore", controllers.PushScore)
 
+	r.POST("/getrank", controllers.GetRankById)
+
 	r.NoRoute(func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
