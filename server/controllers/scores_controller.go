@@ -34,7 +34,7 @@ func GetAllScores(c *gin.Context) {
 	defer db.Close()
 
 	//select all scores from the database
-	rows, err := db.Query("SELECT id, username, score FROM scores where board_size = $1 ORDER BY SCORE ASC;", size)
+	rows, err := db.Query("SELECT id, username, score FROM scores where board_size = $1 ORDER BY SCORE ASC LIMIT 50;", size)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect size value"})
@@ -92,16 +92,59 @@ func PushScore(c *gin.Context) {
 	defer db.Close()
 
 	// INSERT statement
-	result, err := db.Exec("INSERT INTO scores (username, score, board_size) VALUES ($1, $2, $3);", entry.Username, entry.Score, entry.Size)
+	result := db.QueryRow("INSERT INTO scores (username, score, board_size) VALUES ($1, $2, $3) RETURNING id;", entry.Username, entry.Score, entry.Size)
+	var insertedID int
+	err = result.Scan(&insertedID)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert data"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "could not make leaderboard entry"})
 		return
 	}
 
-	// Check the number of rows affected by the insert
-	rowsAffected, _ := result.RowsAffected()
-	fmt.Printf("Rows affected by insert: %d\n", rowsAffected)
+	c.JSON(http.StatusOK, gin.H{"scoreID": insertedID})
+}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Score Updated successfully"})
+func GetRankById(c *gin.Context) {
+	var payload struct {
+		ID int `json:"id"`
+	}
+
+	if err := c.BindJSON(&payload); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id not supplied"})
+		return
+	}
+
+	connStr := os.Getenv("PG_CONN_STR")
+	db, err := sql.Open("postgres", connStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "database connection error"})
+		return
+	}
+	defer db.Close()
+
+	var scoreRank int
+	var score int
+	var user string
+
+	err = db.QueryRow(`
+		WITH ranked_scores AS (
+			SELECT id, username, RANK() OVER (PARTITION BY board_size ORDER BY score ASC) AS score_rank
+			FROM scores
+		)
+		SELECT id, username, score_rank
+		FROM ranked_scores
+		WHERE id = $1;
+	`, payload.ID).Scan(&score, &user, &scoreRank)
+
+	if err == sql.ErrNoRows {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
+		return
+	} else if err != nil {
+		fmt.Printf(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": "type error"})
+		return
+	} else {
+		c.JSON(http.StatusOK, gin.H{"rank": scoreRank, "score": score, "user": user})
+	}
+
 }

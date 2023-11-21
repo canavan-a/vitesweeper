@@ -10,6 +10,9 @@ const Leaderboard = () => {
     const [ leaderboardData, setLeaderboardData] = useState([]);
     const queryParams = new URLSearchParams(location.search);
     const [msg, setMsg] = useState(queryParams.get('s'));
+    const [scoreID, setScoreID] = useState(queryParams.get('sid'));
+
+    const [scoreRankData, setScoreRankData] = useState(null);
     
     async function gameType(){
         let gtype = "a"
@@ -31,14 +34,27 @@ const Leaderboard = () => {
         }
 
         axios.get(`${api}/allscores?size=${gtype}`).then((response) => {
-            // console.log(response.data)
+            console.log(response.data)
             setLeaderboardData(response.data);
+            
         }).catch((error) => {
             console.log(error.response.data)
         })
 
     }
     
+
+    useEffect(()=>{
+        const payload = {
+            id: Number(scoreID),
+        }
+        axios.post(`${api}/getrank`, payload).then((response)=>{
+            console.log(response.data)
+            setScoreRankData(response.data);
+        }).catch((error)=>{
+            console.log(error.response.data);
+        })
+    },[])
 
     useEffect(() => {
         gameType()
@@ -51,11 +67,11 @@ const Leaderboard = () => {
             {leaderboardData.length ===0?(
                 <div>No records to display</div>
             ):(
-            <table>
+                <>            <table>
                 
                 <tbody>
                     {leaderboardData.map((value, index)=>(
-                        <tr key={value.id}>
+                        <tr key={value.id} style={value.id === Number(scoreID)?{backgroundColor:"rgb(100, 108, 255)"}:{}}>
                             <td>{index+1}</td>
                             <td>{value.username}</td>
                             <td>{value.score}s</td>
@@ -63,8 +79,22 @@ const Leaderboard = () => {
                     ))}
                 </tbody>
             </table>
+            
+            </>
+
             )}
             </div>
+            {scoreRankData !== null && scoreRankData.rank > 50 ?(
+                <table>
+                    <tbody>
+                    <tr style={{backgroundColor:"rgb(100, 108, 255)"}}>
+                            <td>{scoreRankData.rank}</td>
+                            <td>{scoreRankData.user}</td>
+                            <td>{scoreRankData.score}s</td>
+                        </tr>
+                    </tbody>
+                </table>
+            ):(<></>)}
             <button style={{marginTop:10}} onClick={()=>{navigate("/")}}>menu</button>
         </>
     )

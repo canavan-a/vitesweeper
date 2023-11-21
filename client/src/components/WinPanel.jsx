@@ -26,7 +26,8 @@ const WinPanel = (props) =>{
                 size: currentGameType,
             }
             axios.post(`${api}/pushscore`, payload).then((response)=>{
-                navigate(`/leaderboard?s=${currentGameType}`)
+                const scoreID = response.data.scoreID
+                navigate(`/leaderboard?s=${currentGameType}&sid=${scoreID}`)
                 setDisableButton("")
                 console.log(response.data)
             }).catch((error)=>{
