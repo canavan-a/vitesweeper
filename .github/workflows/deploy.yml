@@ -11,6 +11,42 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Adjust to your Node.js version
+
+      - name: Install dependencies in the cloned repository
+        working-directory: ./client
+        run: npm install
+
+      - name: Remove current env if it exists
+        working-directory: ./client
+        run: |
+          if [ -f .env ]; then
+            rm .env
+          fi
+
+      - name: Create .env file for client
+        working-directory: ./client
+        run:
+          echo "VITE_API_PATH=''" > .env
+
+      - name: Run npm build in the cloned repository
+        working-directory: ./client
+        run: npm run build  # Adjust to your build command
+        env:
+          CI : false
+
+      - name: Copy index.html to server/templates/
+        run: cp ./client/dist/index.html ./server/templates/
+      
+      - name: Replace assets directory in server
+        run: |
+          rm -rf ./server/assets
+          cp -r ./client/dist/assets ./server/
         
       - name: Create .env file
         env:
