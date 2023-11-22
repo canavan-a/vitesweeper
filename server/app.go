@@ -32,7 +32,7 @@ func main() {
 
 	r.LoadHTMLGlob("templates/*")
 
-	r.Static("/static", "./static")
+	r.Static("/assets", "./assets")
 
 	r.GET("/allscores", controllers.GetAllScores)
 
