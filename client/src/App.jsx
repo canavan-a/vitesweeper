@@ -13,6 +13,11 @@ function App() {
 
   useDisableRightClick();
 
+  //CI CD test
+  useEffect(()=>{
+    console.log("CI/CD success");
+  },[])
+
   return (
     <>
       <GameContextProvider>
