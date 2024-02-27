@@ -7,7 +7,6 @@ import (
 )
 
 func PrintMiddleware(c *gin.Context) {
-
 	fmt.Println("Route has been trigger")
 	c.Next()
 }
