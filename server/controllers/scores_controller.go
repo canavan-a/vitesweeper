@@ -142,7 +142,6 @@ func GetRankById(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id not found"})
 		return
 	} else if err != nil {
-		fmt.Printf(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "type error"})
 		return
 	} else {
