@@ -5,15 +5,17 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
 type UserScore struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Score    int    `json:"score"`
+	ID           int       `json:"id"`
+	Username     string    `json:"username"`
+	Score        int       `json:"score"`
+	DateRecorded time.Time `json:"dateRecorded"`
 }
 
 func GetAllScores(c *gin.Context) {
@@ -34,7 +36,7 @@ func GetAllScores(c *gin.Context) {
 	defer db.Close()
 
 	//select all scores from the database
-	rows, err := db.Query("SELECT id, username, score FROM scores where board_size = $1 ORDER BY SCORE ASC LIMIT 50;", size)
+	rows, err := db.Query("SELECT id, username, score, date_recorded FROM scores WHERE board_size = $1 ORDER BY score ASC LIMIT 50;", size)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Incorrect size value"})
@@ -46,7 +48,7 @@ func GetAllScores(c *gin.Context) {
 	var scores []UserScore
 	for rows.Next() {
 		var user UserScore
-		if err := rows.Scan(&user.ID, &user.Username, &user.Score); err != nil {
+		if err := rows.Scan(&user.ID, &user.Username, &user.Score, &user.DateRecorded); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "cannot scan data"})
 			return
 		}
