@@ -5,12 +5,22 @@ import (
 	"main/controllers"
 	"main/middleware"
 	"net/http"
+	"time"
 
+	ratelimit "github.com/JGLTechnologies/gin-rate-limit"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
+
+func keyFunc(c *gin.Context) string {
+	return c.ClientIP()
+}
+
+func errorHandler(c *gin.Context, info ratelimit.Info) {
+	c.String(429, "Too many requests. Try again in "+time.Until(info.ResetTime).String())
+}
 
 func main() {
 
@@ -27,6 +37,16 @@ func main() {
 	config.AllowOrigins = []string{"*"}
 	r.Use(cors.New(config))
 
+	store := ratelimit.InMemoryStore(&ratelimit.InMemoryOptions{
+		Rate:  time.Minute,
+		Limit: 15,
+	})
+
+	mw := ratelimit.RateLimiter(store, &ratelimit.Options{
+		ErrorHandler: errorHandler,
+		KeyFunc:      keyFunc,
+	})
+
 	//testing middleware
 	r.Use(middleware.PrintMiddleware)
 
@@ -36,7 +56,7 @@ func main() {
 
 	r.GET("/allscores", controllers.GetAllScores)
 
-	r.POST("/pushscore", controllers.PushScore)
+	r.POST("/pushscore", mw, controllers.PushScore)
 
 	r.POST("/getrank", controllers.GetRankById)
 
