@@ -58,8 +58,8 @@ func main() {
 		c.JSON(200, gin.H{"response":"pong"})
 	})
 
-	r.GET("/dick", func(c *gin.Context){
-		c.JSON(200, gin.H{"response":"balls"})
+	r.GET("/hello", func(c *gin.Context){
+		c.JSON(200, gin.H{"response":"world"})
 	})
 
 	r.GET("/allscores", controllers.GetAllScores)
