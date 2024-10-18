@@ -62,6 +62,10 @@ func main() {
 		c.JSON(200, gin.H{"response":"world"})
 	})
 
+	r.GET("/drake", func(c *gin.Context){
+		c.JSON(200, gin.H{"response":"josh"})
+	})
+
 	r.GET("/allscores", controllers.GetAllScores)
 
 	r.POST("/pushscore", mw, controllers.PushScore)
