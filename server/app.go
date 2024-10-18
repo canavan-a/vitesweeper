@@ -70,6 +70,9 @@ func main() {
 		c.JSON(200, gin.H{"response":"tester"})
 	})
 
+	r.GET("/silly", func(c *gin.Context){
+		c.JSON(200, gin.H{"response":"billy"})
+	})
 
 	r.GET("/allscores", controllers.GetAllScores)
 
