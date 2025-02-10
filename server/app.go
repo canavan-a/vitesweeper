@@ -54,24 +54,24 @@ func main() {
 
 	r.Static("/assets", "./assets")
 
-	r.GET("/ping", func(c *gin.Context){
-		c.JSON(200, gin.H{"response":"pong"})
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{"response": "pong"})
 	})
 
-	r.GET("/hello", func(c *gin.Context){
-		c.JSON(200, gin.H{"response":"world"})
+	r.GET("/hello", func(c *gin.Context) {
+		c.JSON(200, gin.H{"response": "world"})
 	})
 
-	r.GET("/drake", func(c *gin.Context){
-		c.JSON(200, gin.H{"response":"josh"})
+	r.GET("/drake", func(c *gin.Context) {
+		c.JSON(200, gin.H{"response": "josh"})
 	})
 
-	r.GET("/tester", func(c *gin.Context){
-		c.JSON(200, gin.H{"response":"tester"})
+	r.GET("/tester", func(c *gin.Context) {
+		c.JSON(200, gin.H{"response": "tester"})
 	})
 
-	r.GET("/silly", func(c *gin.Context){
-		c.JSON(200, gin.H{"response":"billy"})
+	r.GET("/silly", func(c *gin.Context) {
+		c.JSON(200, gin.H{"response": "billy"})
 	})
 
 	r.GET("/allscores", controllers.GetAllScores)
